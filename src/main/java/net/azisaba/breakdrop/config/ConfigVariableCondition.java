@@ -1,9 +1,8 @@
 package net.azisaba.breakdrop.config;
 
-import io.lumine.xikage.mythicmobs.MythicMobs;
-import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitPlayer;
-import io.lumine.xikage.mythicmobs.skills.variables.VariableRegistry;
-import io.lumine.xikage.mythicmobs.skills.variables.VariableScope;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.core.skills.variables.VariableRegistry;
+import io.lumine.mythic.core.skills.variables.VariableScope;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -78,9 +77,9 @@ public final class ConfigVariableCondition implements Condition {
     public boolean check(@NotNull Player player, @NotNull Block block) {
         VariableRegistry registry;
         if (getScope() == VariableScope.CASTER) {
-            registry = MythicMobs.inst().getPlayerManager().getPlayerData(new BukkitPlayer(player)).getVariables();
+            registry = MythicBukkit.inst().getPlayerManager().getProfile(player).getVariables();
         } else {
-            registry = MythicMobs.inst().getVariableManager().getGlobalRegistry().get();
+            registry = MythicBukkit.inst().getVariableManager().getGlobalRegistry();
         }
         switch (getType()) {
             case STRING:

@@ -5,7 +5,6 @@ import net.azisaba.breakdrop.BreakDrop;
 import net.azisaba.breakdrop.config.ConfigDrop;
 import net.azisaba.breakdrop.config.ConfigDropFunction;
 import net.azisaba.breakdrop.util.ItemUtil;
-import net.minecraft.server.v1_15_R1.NBTTagCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
 import org.bukkit.event.EventHandler;
@@ -14,12 +13,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 
 public class BreakListener implements Listener {
-    private static final Set<String> EXCLUDED_LIFE_ITEM_ID = new HashSet<>(Arrays.asList("56fabea9-e1f9-4e7f-ae78-83e07e8b8767"));
+    private static final Set<String> EXCLUDED_LIFE_ITEM_ID = Set.of("56fabea9-e1f9-4e7f-ae78-83e07e8b8767");
     private final BreakDrop plugin;
 
     public BreakListener(@NotNull BreakDrop plugin) {
@@ -28,14 +25,14 @@ public class BreakListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockBreak(@NotNull BlockBreakEvent e) {
-        NBTTagCompound mainTag = ItemUtil.getTag(e.getPlayer().getInventory().getItemInMainHand());
-        NBTTagCompound offTag = ItemUtil.getTag(e.getPlayer().getInventory().getItemInOffHand());
-        if (EXCLUDED_LIFE_ITEM_ID.contains(mainTag.getString("LifeItemId")) || EXCLUDED_LIFE_ITEM_ID.contains(offTag.getString("LifeItemId"))) {
-            return;
-        }
+        var mainLifeItemId = ItemUtil.getStringTag(e.getPlayer().getInventory().getItemInMainHand(), "LifeItemId");
+        var offLifeItemId = ItemUtil.getStringTag(e.getPlayer().getInventory().getItemInOffHand(), "LifeItemId");
+        if (EXCLUDED_LIFE_ITEM_ID.contains(mainLifeItemId) || EXCLUDED_LIFE_ITEM_ID.contains(offLifeItemId)) return;
+
         if (Bukkit.getPluginManager().isPluginEnabled("mcMMO") && checkPlaceStore(e.getBlock().getState())) {
             return;
         }
+
         for (ConfigDrop drop : plugin.getPluginConfig().getDrops()) {
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
                 if (!drop.canExecute(e.getPlayer(), e.getBlock())) {
@@ -56,6 +53,7 @@ public class BreakListener implements Listener {
         }
     }
 
+    @SuppressWarnings("removal")
     private static boolean checkPlaceStore(BlockState blockState) {
         return mcMMO.getPlaceStore().isTrue(blockState);
     }

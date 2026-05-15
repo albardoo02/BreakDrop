@@ -1,13 +1,14 @@
 package net.azisaba.breakdrop.config;
 
-import io.lumine.xikage.mythicmobs.MythicMobs;
-import io.lumine.xikage.mythicmobs.adapters.AbstractLocation;
-import io.lumine.xikage.mythicmobs.adapters.AbstractPlayer;
-import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
-import io.lumine.xikage.mythicmobs.api.bukkit.BukkitAPIHelper;
-import io.lumine.xikage.mythicmobs.mobs.GenericCaster;
-import io.lumine.xikage.mythicmobs.skills.SkillMetadata;
-import io.lumine.xikage.mythicmobs.skills.SkillTrigger;
+import io.lumine.mythic.api.adapters.AbstractLocation;
+import io.lumine.mythic.api.adapters.AbstractPlayer;
+import io.lumine.mythic.api.mobs.GenericCaster;
+import io.lumine.mythic.api.skills.SkillMetadata;
+import io.lumine.mythic.bukkit.BukkitAPIHelper;
+import io.lumine.mythic.bukkit.BukkitAdapter;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.core.skills.SkillMetadataImpl;
+import io.lumine.mythic.core.skills.SkillTriggers;
 import net.azisaba.breakdrop.util.ConfigUtil;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
@@ -116,8 +117,8 @@ public final class ConfigDropFunction {
         AbstractPlayer mythicPlayer = BukkitAdapter.adapt(player);
         AbstractLocation loc = BukkitAdapter.adapt(player.getLocation());
         SkillMetadata meta =
-                new SkillMetadata(
-                        SkillTrigger.BLOCK_BREAK,
+                new SkillMetadataImpl(
+                        SkillTriggers.BLOCK_BREAK,
                         new GenericCaster(mythicPlayer),
                         mythicPlayer,
                         loc,
@@ -125,6 +126,6 @@ public final class ConfigDropFunction {
                         new HashSet<>(Collections.singleton(loc)),
                         0f);
         meta.getVariables().putString("equip-slot", "HAND");
-        MythicMobs.inst().getSkillManager().getSkill(skillName).ifPresent(skill -> skill.execute(meta));
+        MythicBukkit.inst().getSkillManager().getSkill(skillName).ifPresent(skill -> skill.execute(meta));
     }
 }

@@ -1,5 +1,5 @@
 # BreakDrop
-BreakDrop is a simple plugin for spigot 1.15.2 that allows you to execute some functions when destroying blocks.
+BreakDrop is a simple plugin for paper 1.21.11 that allows you to execute some functions when destroying blocks.
 
 ## Configuration syntax
 

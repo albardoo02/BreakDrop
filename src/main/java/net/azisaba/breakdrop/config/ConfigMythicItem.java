@@ -29,6 +29,6 @@ public final class ConfigMythicItem implements ConfigItem {
 
     @Override
     public boolean check(@Nullable ItemStack item) {
-        return ItemUtil.getMythicType(item).equals(getMythicType());
+        return getMythicType().equals(ItemUtil.getMythicType(item));
     }
 }
