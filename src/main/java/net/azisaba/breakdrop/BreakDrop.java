@@ -12,6 +12,7 @@ public final class BreakDrop extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        this.saveDefaultConfig();
         this.config = PluginConfig.load(this.getConfig());
         Bukkit.getPluginManager().registerEvents(new BreakListener(this), this);
     }
