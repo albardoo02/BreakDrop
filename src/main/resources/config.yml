@@ -1,0 +1,64 @@
+# BreakDrop Configuration
+
+# ブロックを破壊した際の処理(ドロップ・スキル実行)のリストです．
+# 複数の設定を追加することができます．
+drops:
+  - functions:
+      # 実行する処理(スキル)のリスト
+      - skills: [breakskill2] # MythicMobsのスキル名を指定
+        chance: 0.008 # 実行される確率(0.0 ～ 1.0)
+      - skills: [sagyouherumetto]
+        chance: 1
+    # 処理が実行されるための条件(省略すると常に実行されます)
+    condition:
+      op: OR # OR(いずれかを満たせばOK)またはAND(すべて満たせばOK)
+      conditions:
+        - inventory:
+            - mythic_type: sagyouherumetto # 指定したMythicMobsのアイテムを持っているか
+              slot: helmet # 装備スロット(helmet, chestplate, leggings, boots, mainhand, offhandなど．省略時は全スロットを判定します．)
+        - inventory:
+            - type: leather_helmet # バニラのアイテム(Material名)
+              display_name: '&6&l作業&e&lヘルメット' # アイテムの表示名
+              slot: helmet
+  # === その他のすべてのオプション例 ===
+  # - condition:
+  #     # 特定のワールドでのみ動作させる場合
+  #     worlds:
+  #       - "world"
+  #       - "world_nether"
+  #
+  #     # 特定のワールドを除外する場合
+  #     worlds_except:
+  #       - "world_the_end"
+  #
+  #     # ブロックを破壊したY座標の条件(以下、以上)
+  #     max_y_inclusive: 100
+  #     min_y_inclusive: 0
+  #
+  #     # インベントリ条件 (crackshot, custom_model_data, enchantmentsなども指定可能)
+  #     inventory:
+  #       - type: diamond_pickaxe
+  #         custom_model_data: 123
+  #         slot: mainhand
+  #         enchantments:
+  #           - "efficiency:5"
+  #       # CrackShotの武器も判定可能
+  #       - crackshot_type: "my_gun"
+  #         slot: mainhand
+  #
+  #     # MythicMobsの変数条件
+  #     variables:
+  #       - scope: "caster" # "caster"(プレイヤーごと)または"global"(全体)
+  #         key: "mining_level" # 変数名
+  #         type: "int" # 変数の型 (string, int, float)
+  #         value: 10 # 比較する値
+  #         op: ">=" # 演算子 (=, !=, <, >, <=, >=)
+  #
+  #   functions:
+  #     - skills: [ExampleSkill1, ExampleSkill2]
+  #       skills_random: true # trueにすると、上記skillsの中からランダムで1つだけ実行されます
+  #       chance: 0.5 # 実行確率 (50%)
+  #       count: 1 # 実行回数 (複数回実行させたい場合は2以上に設定)
+  #       # functionごとにも個別の条件(condition)を設定可能です。
+  #       # condition:
+  #       #   worlds: [ "world" ]
